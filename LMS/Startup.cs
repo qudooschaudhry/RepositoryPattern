@@ -1,7 +1,9 @@
+using LMS.Infrastructure.DataContext;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,17 +28,29 @@ namespace LMS
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "LMS", Version = "v1" });
             });
+
+
+            services.AddDbContext<LMSContext>(
+               options => options.UseSqlServer(
+                   Configuration.GetSection("SqlConfiguration")["LMSConnectionString"],
+                   sqlServerOptionsAction: sqlOptions =>
+                   {
+                       sqlOptions.EnableRetryOnFailure(
+                           maxRetryCount: 10,
+                           maxRetryDelay: TimeSpan.FromSeconds(60),
+                           errorNumbersToAdd: null);
+                   }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            MigrateLMSDatebase(app);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -54,6 +68,15 @@ namespace LMS
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private static void MigrateLMSDatebase(IApplicationBuilder app)
+        {
+            using var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope();
+            using var context = serviceScope.ServiceProvider.GetService<LMSContext>();
+            context?.Database.Migrate();
         }
     }
 }
