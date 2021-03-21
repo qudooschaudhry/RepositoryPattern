@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+  data:
+    image: microsoft/mssql-server-windows-developer 
+    environment:
+        - ACCEPT_EULA=Y
+        - sa_password=!23qweASD
+    ports:
+        - '51433:1433'
+  lms:
+    image: ${DOCKER_REGISTRY-}lms
+    build:
+      context: .
+      dockerfile: LMS\Dockerfile
+    depends_on:
+     - data
+  
