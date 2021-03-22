@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LMS.Domain
 {
-    public class Course
+    public class Course : IRootAggregate
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

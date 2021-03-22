@@ -1,4 +1,5 @@
 using LMS.Infrastructure.DataContext;
+using LMS.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,12 +29,9 @@ namespace LMS
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "LMS", Version = "v1" });
-            });
+            services.AddHealthChecks();
 
+            services.AddScoped<ICourseRepository, CourseRepository>();
 
             services.AddDbContext<LMSContext>(
                options => options.UseSqlServer(
@@ -45,6 +43,14 @@ namespace LMS
                            maxRetryDelay: TimeSpan.FromSeconds(60),
                            errorNumbersToAdd: null);
                    }));
+
+
+            services.AddControllers();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "LMS", Version = "v1" });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,6 +73,7 @@ namespace LMS
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/hc");
             });
         }
 
