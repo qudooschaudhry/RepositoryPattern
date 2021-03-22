@@ -25,9 +25,10 @@ namespace LMS.Infrastructure.Repositories
             await Task.Delay(0);
             return _context.Courses.FirstOrDefault(c => c.Id == id);
         }
-        public Task<IQueryable<Course>> GetAll()
+        public async Task<IEnumerable<Course>> GetAll()
         {
-            throw new NotImplementedException();
+            await Task.Delay(0);
+            return _context.Courses.ToList();
         }
         public Task Add(Course entity)
         {

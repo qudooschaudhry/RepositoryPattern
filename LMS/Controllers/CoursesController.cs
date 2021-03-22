@@ -21,9 +21,22 @@ namespace LMS.Controllers
         }
 
         [HttpGet]
+        public async Task<ActionResult<IEnumerable<Course>>> Get()
+        {
+            var courses = await _courseRepository.GetAll();
+
+            return Ok(courses);
+        }
+
+        [HttpGet, Route("{id}")]
         public async Task<ActionResult<Course>> Get(Guid id)
         {
-            return await _courseRepository.GetById(id);
+            var course = await _courseRepository.GetById(id);
+
+            if (course == null)
+                return NotFound();
+
+            return Ok(course);
         }
     }
 }

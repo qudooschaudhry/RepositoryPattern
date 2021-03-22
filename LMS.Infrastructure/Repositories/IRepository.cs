@@ -10,7 +10,7 @@ namespace LMS.Infrastructure.Repositories
     public interface IRepository<T> where T : IRootAggregate, new()
     {
         Task<T> GetById(Guid id);
-        Task<IQueryable<T>> GetAll();
+        Task<IEnumerable<T>> GetAll();
         Task Add(T entity);
         Task Save(T entity);
     }
