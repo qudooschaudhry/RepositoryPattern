@@ -19,20 +19,37 @@ namespace LMS.Infrastructure.Migrations
                 .HasAnnotation("ProductVersion", "5.0.4")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("CourseStudent", b =>
+                {
+                    b.Property<Guid>("CoursesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("StudentsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CoursesId", "StudentsId");
+
+                    b.HasIndex("StudentsId");
+
+                    b.ToTable("CourseStudent");
+                });
+
             modelBuilder.Entity("LMS.Domain.Chapter", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CourseId")
+                    b.Property<Guid>("CourseId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -74,17 +91,14 @@ namespace LMS.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("StartDate")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("StudentId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("StudentId");
 
                     b.ToTable("Courses");
                 });
@@ -95,8 +109,11 @@ namespace LMS.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ChapterId")
+                    b.Property<Guid>("ChapterId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -120,7 +137,7 @@ namespace LMS.Infrastructure.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("PageId")
+                    b.Property<Guid>("PageId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -149,27 +166,39 @@ namespace LMS.Infrastructure.Migrations
                     b.ToTable("Students");
                 });
 
+            modelBuilder.Entity("CourseStudent", b =>
+                {
+                    b.HasOne("LMS.Domain.Course", null)
+                        .WithMany()
+                        .HasForeignKey("CoursesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LMS.Domain.Student", null)
+                        .WithMany()
+                        .HasForeignKey("StudentsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("LMS.Domain.Chapter", b =>
                 {
                     b.HasOne("LMS.Domain.Course", "Course")
                         .WithMany()
-                        .HasForeignKey("CourseId");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Course");
-                });
-
-            modelBuilder.Entity("LMS.Domain.Course", b =>
-                {
-                    b.HasOne("LMS.Domain.Student", null)
-                        .WithMany("Courses")
-                        .HasForeignKey("StudentId");
                 });
 
             modelBuilder.Entity("LMS.Domain.Page", b =>
                 {
                     b.HasOne("LMS.Domain.Chapter", "Chapter")
                         .WithMany()
-                        .HasForeignKey("ChapterId");
+                        .HasForeignKey("ChapterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Chapter");
                 });
@@ -182,7 +211,9 @@ namespace LMS.Infrastructure.Migrations
 
                     b.HasOne("LMS.Domain.Page", "Page")
                         .WithMany("Sections")
-                        .HasForeignKey("PageId");
+                        .HasForeignKey("PageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Content");
 
@@ -192,11 +223,6 @@ namespace LMS.Infrastructure.Migrations
             modelBuilder.Entity("LMS.Domain.Page", b =>
                 {
                     b.Navigation("Sections");
-                });
-
-            modelBuilder.Entity("LMS.Domain.Student", b =>
-                {
-                    b.Navigation("Courses");
                 });
 #pragma warning restore 612, 618
         }
