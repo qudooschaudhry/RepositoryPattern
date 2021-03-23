@@ -4,15 +4,12 @@ services:
   sqldata:
     image: microsoft/mssql-server-windows-developer 
     environment:
-        - ACCEPT_EULA=Y
-        - sa_password=!23qweASD
+     - ACCEPT_EULA=Y
+     - sa_password=!23qweASD
     ports:
-        - '51433:1433'
-  lms:
-    image: ${DOCKER_REGISTRY-}lms
+     - '51433:1433'
+  lms.ui:
+    image: ${DOCKER_REGISTRY-}lmsui
     build:
       context: .
-      dockerfile: LMS\Dockerfile
-    depends_on:
-      - sqldata
-  
+      dockerfile: LMS.UI\Dockerfile

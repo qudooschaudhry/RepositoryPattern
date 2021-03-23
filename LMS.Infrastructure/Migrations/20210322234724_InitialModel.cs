@@ -28,8 +28,8 @@ namespace LMS.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StartDate = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EndDate = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,7 +50,7 @@ namespace LMS.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Chapter",
+                name: "Chapters",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -60,9 +60,9 @@ namespace LMS.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Chapter", x => x.Id);
+                    table.PrimaryKey("PK_Chapters", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Chapter_Courses_CourseId",
+                        name: "FK_Chapters_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "Id",
@@ -105,9 +105,9 @@ namespace LMS.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Pages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Pages_Chapter_ChapterId",
+                        name: "FK_Pages_Chapters_ChapterId",
                         column: x => x.ChapterId,
-                        principalTable: "Chapter",
+                        principalTable: "Chapters",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -140,8 +140,8 @@ namespace LMS.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Chapter_CourseId",
-                table: "Chapter",
+                name: "IX_Chapters_CourseId",
+                table: "Chapters",
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(
@@ -183,7 +183,7 @@ namespace LMS.Infrastructure.Migrations
                 name: "Pages");
 
             migrationBuilder.DropTable(
-                name: "Chapter");
+                name: "Chapters");
 
             migrationBuilder.DropTable(
                 name: "Courses");

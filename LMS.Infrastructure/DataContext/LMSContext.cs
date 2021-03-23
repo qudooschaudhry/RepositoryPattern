@@ -11,7 +11,7 @@ namespace LMS.Infrastructure.DataContext
     public class LMSContext : DbContext
     {
         public DbSet<Course> Courses { get; set; }
-        public DbSet<Chapter> Chapter { get; set; }
+        public DbSet<Chapter> Chapters { get; set; }
         public DbSet<Page> Pages { get; set; }
         public DbSet<Section> Sections { get; set; }
         public DbSet<Content> Contents { get; set; }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LMS.Infrastructure.Repositories
@@ -20,23 +21,24 @@ namespace LMS.Infrastructure.Repositories
             _context = context;
         }
        
-        public async Task<Course> GetById(Guid id)
+        public async Task<Course> GetById(Guid id, CancellationToken cancellationToken)
         {
-            await Task.Delay(0);
+            await Task.Delay(0, cancellationToken);
             return _context.Courses.FirstOrDefault(c => c.Id == id);
         }
-        public async Task<IEnumerable<Course>> GetAll()
+        public async Task<IEnumerable<Course>> GetAll(CancellationToken cancellationToken)
         {
-            await Task.Delay(0);
+            await Task.Delay(0, cancellationToken);
             return _context.Courses.ToList();
         }
-        public Task Add(Course entity)
+        public async Task Add(Course entity, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await _context.Courses.AddAsync(entity);
+            await _context.SaveChangesAsync(cancellationToken);
         }
-        public Task Save(Course entity)
+        public async Task Save(Course entity, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }
