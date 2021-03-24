@@ -11,5 +11,12 @@ namespace LMS.Domain
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public List<Student> Students { get; set; } = new List<Student>();
+
+        public void Update(string name, string description)
+        {
+            //dont really care about all the properties
+            Name = name;
+            Description = description;
+        }
     }
 }

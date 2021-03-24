@@ -30,7 +30,7 @@ namespace LMS.UI.Controllers
                 EndDate = c.EndDate
             }));
         }
-
+        [HttpGet]
         public async Task<IActionResult> Edit(Guid id, CancellationToken cancellationToken)
         {
             var course = await _courseRepository.GetById(id, cancellationToken);
@@ -42,6 +42,18 @@ namespace LMS.UI.Controllers
                 StartDate = course.StartDate, 
                 EndDate = course.EndDate
             });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditCourseViewModel viewModel, CancellationToken cancellationToken)
+        {
+            var course = await _courseRepository.GetById(viewModel.Id, cancellationToken);
+
+            course.Update(viewModel.Name);
+
+            await _courseRepository.Save(course, cancellationToken);
+
+            return View(viewModel);
         }
     }
 }

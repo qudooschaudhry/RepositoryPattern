@@ -1,3 +1,35 @@
 ﻿@model LMS.UI.Models.EditCourseViewModel
 
-<h2>Edit @Model.Name</h2> 
+<h1>Edit @Model.Name</h1>
+
+@using (Html.BeginForm(
+"edit",
+"courses",
+FormMethod.Post,
+new { @id = "course-edit-form", @class = "row g3" }))
+{
+    @Html.HiddenFor(m => m.Id)
+    <div class="col-md-6">
+        @Html.LabelFor(m => m.Name, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+    </div>
+    <div class="col-md-6">
+        &nbsp;
+    </div>
+    <div class="col-md-6">
+        @Html.LabelFor(m => m.StartDate, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.StartDate, new { @class = "form-control" })
+    </div>
+    <div class="col-md-6">
+        @Html.LabelFor(m => m.EndDate, new { @class = "form-label" })
+        @Html.TextBoxFor(m => m.EndDate, new { @class = "form-control" })
+    </div>
+    <div class="col-md-12">
+        @Html.LabelFor(m => m.Description, new { @class = "form-label" })
+        @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = 5, cols = 20 })
+    </div>
+    <div class="col-auto">
+        <br />
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+}

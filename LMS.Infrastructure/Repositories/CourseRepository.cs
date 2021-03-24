@@ -40,5 +40,11 @@ namespace LMS.Infrastructure.Repositories
         {
             await _context.SaveChangesAsync(cancellationToken);
         }
+
+        public async Task Delete(Course entity, CancellationToken cancellationToken)
+        {
+            _context.Courses.Remove(entity);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
     }
 }

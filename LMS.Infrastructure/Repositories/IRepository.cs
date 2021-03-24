@@ -14,5 +14,6 @@ namespace LMS.Infrastructure.Repositories
         Task<IEnumerable<T>> GetAll(CancellationToken cancellationToken);
         Task Add(T entity, CancellationToken cancellationToken);
         Task Save(T entity, CancellationToken cancellationToken);
+        Task Delete(T entity, CancellationToken cancellationToken);
     }
 }
