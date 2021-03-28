@@ -30,16 +30,36 @@ namespace LMS.UI.Controllers
                 EndDate = c.EndDate
             }));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id, CancellationToken cancellationToken)
+        {
+            var course = await _courseRepository.GetById(id, cancellationToken);
+            return View(new CourseDetailsViewModel() 
+            {
+                Id = course.Id,
+                Name = course.Name,
+                StartDate = course.StartDate,
+                EndDate = course.EndDate,
+                Chapters = course.Chapters.Select(c => new ChapterViewModel() 
+                {
+                    Id = c.Id,
+                    ChapterNumber = c.Number,
+                    Title = c.Title,
+                }).ToList()
+            });
+        }
+        
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id, CancellationToken cancellationToken)
         {
             var course = await _courseRepository.GetById(id, cancellationToken);
 
             return View(new EditCourseViewModel() 
-            { 
+            {
                 Id = course.Id,
                 Name = course.Name,
-                StartDate = course.StartDate, 
+                StartDate = course.StartDate,
                 EndDate = course.EndDate
             });
         }

@@ -1,5 +1,6 @@
 ﻿using LMS.Domain;
 using LMS.Infrastructure.DataContext;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,16 +21,18 @@ namespace LMS.Infrastructure.Repositories
         {
             _context = context;
         }
-       
+
         public async Task<Course> GetById(Guid id, CancellationToken cancellationToken)
         {
             await Task.Delay(0, cancellationToken);
-            return _context.Courses.FirstOrDefault(c => c.Id == id);
+            return _context.Courses
+                .Include(c => c.Chapters)
+                .FirstOrDefault(c => c.Id == id);
         }
         public async Task<IEnumerable<Course>> GetAll(CancellationToken cancellationToken)
         {
             await Task.Delay(0, cancellationToken);
-            return _context.Courses.ToList();
+            return _context.Courses.OrderBy(c => c.Name).ToList();
         }
         public async Task Add(Course entity, CancellationToken cancellationToken)
         {
