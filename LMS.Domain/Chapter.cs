@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace LMS.Domain
 {
@@ -9,5 +10,6 @@ namespace LMS.Domain
         public Course Course { get; set; }
         public int Number { get; set; }
         public string Title { get; set; }
+        public List<Page> Pages { get; set; } = new List<Page>();
     }
 }

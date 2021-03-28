@@ -49,7 +49,7 @@ namespace LMS.UI.Controllers
         {
             var course = await _courseRepository.GetById(viewModel.Id, cancellationToken);
 
-            course.Update(viewModel.Name);
+            course.Update(viewModel.Name, viewModel.Description);
 
             await _courseRepository.Save(course, cancellationToken);
 
