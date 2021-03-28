@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LMS.Infrastructure.Migrations
 {
     [DbContext(typeof(LMSContext))]
-    [Migration("20210322234724_InitialModel")]
+    [Migration("20210328190738_InitialModel")]
     partial class InitialModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -186,7 +186,7 @@ namespace LMS.Infrastructure.Migrations
             modelBuilder.Entity("LMS.Domain.Chapter", b =>
                 {
                     b.HasOne("LMS.Domain.Course", "Course")
-                        .WithMany()
+                        .WithMany("Chapters")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -197,7 +197,7 @@ namespace LMS.Infrastructure.Migrations
             modelBuilder.Entity("LMS.Domain.Page", b =>
                 {
                     b.HasOne("LMS.Domain.Chapter", "Chapter")
-                        .WithMany()
+                        .WithMany("Pages")
                         .HasForeignKey("ChapterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -220,6 +220,16 @@ namespace LMS.Infrastructure.Migrations
                     b.Navigation("Content");
 
                     b.Navigation("Page");
+                });
+
+            modelBuilder.Entity("LMS.Domain.Chapter", b =>
+                {
+                    b.Navigation("Pages");
+                });
+
+            modelBuilder.Entity("LMS.Domain.Course", b =>
+                {
+                    b.Navigation("Chapters");
                 });
 
             modelBuilder.Entity("LMS.Domain.Page", b =>

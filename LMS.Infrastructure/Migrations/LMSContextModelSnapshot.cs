@@ -184,7 +184,7 @@ namespace LMS.Infrastructure.Migrations
             modelBuilder.Entity("LMS.Domain.Chapter", b =>
                 {
                     b.HasOne("LMS.Domain.Course", "Course")
-                        .WithMany()
+                        .WithMany("Chapters")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -195,7 +195,7 @@ namespace LMS.Infrastructure.Migrations
             modelBuilder.Entity("LMS.Domain.Page", b =>
                 {
                     b.HasOne("LMS.Domain.Chapter", "Chapter")
-                        .WithMany()
+                        .WithMany("Pages")
                         .HasForeignKey("ChapterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -218,6 +218,16 @@ namespace LMS.Infrastructure.Migrations
                     b.Navigation("Content");
 
                     b.Navigation("Page");
+                });
+
+            modelBuilder.Entity("LMS.Domain.Chapter", b =>
+                {
+                    b.Navigation("Pages");
+                });
+
+            modelBuilder.Entity("LMS.Domain.Course", b =>
+                {
+                    b.Navigation("Chapters");
                 });
 
             modelBuilder.Entity("LMS.Domain.Page", b =>

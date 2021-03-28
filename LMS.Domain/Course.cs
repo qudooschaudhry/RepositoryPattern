@@ -10,6 +10,7 @@ namespace LMS.Domain
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
+        public List<Chapter> Chapters { get; set; } = new List<Chapter>();
         public List<Student> Students { get; set; } = new List<Student>();
 
         public void Update(string name, string description)
